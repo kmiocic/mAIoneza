@@ -1,13 +1,26 @@
-import requests
+from init import *
+import http.server
+import socketserver
 
-# Postavljanje URL-a za lokalni poslužitelj
-url = 'http://localhost:8081/user/login'
+PORT = 5500
 
-# Postavljanje podataka koje želite poslati na poslužitelj u obliku rječnika
-data = {'username': 'admin', 'passwork': 'admin'}
+def main(): 
+    
 
-# Slanje POST zahtjeva
-response = requests.post(url, data=data)
+    ##Handler = http.server.SimpleHTTPRequestHandler
 
-# Ispisivanje odgovora poslužitelja
-print(response.text)
+    ##with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    ##    print("serving at port", PORT)
+    ##    httpd.serve_forever()
+
+    init()
+
+    
+
+
+
+
+
+if __name__ == "__main__":
+    main()
+
