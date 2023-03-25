@@ -25,7 +25,7 @@ def find_DLG_bishop_moves(board, row, col):
                         # black vraca boolean znaci true:
                         if testlista[row + r][col - c]["black"] != testlista[row][col]["black"] and testlista[row + r][col - c]["type"] != "C":
                             moves.append([row + r, col - c])
-                
+
     #dole
     for r in range(1, row+1):
         if r != row:
@@ -42,7 +42,7 @@ def find_DLG_bishop_moves(board, row, col):
                     else:
                         if testlista[row + r][col - c]["black"] != testlista[row][col]["black"] and testlista[row + r][col - c]["type"] != "C":
                             moves.append([row+r,col+c])
-    
+
     return moves
 
 
@@ -50,24 +50,27 @@ def find_DLG_bishop_moves(board, row, col):
 #==================================================PIJAN===========================================================
 #==================================================================================================================
 
-def find_pawn_moves(board, row, col, color):
+def find_pawn_moves(board, row, col):
     moves = []
     testlista = board.get_board1()
 
-    if color == 'w':
-        if row == 1:
-            if board[row + 2][col + 2] == None:
+    if testlista[row][col]['black'] != True :
+        if row == 2:
+            if testlista[row + 2][col + 2] == None:
                 moves.append((row + 2, col + 2))
-            if board[row + 2][col - 2] == None:
+            if testlista[row + 2][col - 2] == None:
                 moves.append((row + 2, col - 2))
-            if board[row + 1][col + 1] == None:
+            if testlista[row + 1][col + 1] == None:
                 moves.append((row + 1, col + 1))
-            if board[row + 1][col - 1] == None:
+            if testlista[row + 1][col - 1] == None:
                 moves.append((row + 1, col - 1))
 
-            # PROVJERA JEL MOJA BOJA ISPRED
-            # if board[row + 1][col] != None:
-            #     moves.append((row + 1, col))
+            if testlista[row + 1][col + 1] is not None:
+                if testlista[row + 1][col + 1]['black']:
+                    moves.append((row + 1, col - 1))
+
+            if board[row + 1][col] is None:
+                moves.append((row + 1, col))
 
             # todo provjeri je li cigla ispred
         else:
@@ -114,10 +117,9 @@ def find_knight_moves(board, row, col):
     for move in l_moves:
         new_row = row + move[0]
         new_col = col + move[1]
-        if 1 <= new_row <= 12 and 1 <= new_col <= 12 and (testlista[new_row][new_col] is not None or testlista[new_row][new_col]['black'] != testlista[row][col]['black']):
-            #i nije cigla
+        if 1 <= new_row <= 12 and 1 <= new_col <= 12 and (testlista[new_row][new_col] is not None or testlista[new_row][new_col]['black'] != testlista[row][col]['black']) and testlista[new_row][new_col]["type"] != "C":
             moves.append([new_row, new_col])
-    
+
     return moves
 
 #==================================================================================================================
@@ -126,7 +128,7 @@ def find_knight_moves(board, row, col):
 
 def find_rook_moves(board, row, col, color):
     moves = []
-    
+
     # Check horizontal and vertical moves
     for i in range(row+1, 12):
         if board[i][col] == None:
@@ -137,7 +139,7 @@ def find_rook_moves(board, row, col, color):
             break
         else:
             break
-    
+
     for i in range(row-1, -1, -1):
         if board[i][col] == None:
             moves.append((i, col))
@@ -147,7 +149,7 @@ def find_rook_moves(board, row, col, color):
             break
         else:
             break
-            
+
     for j in range(col+1, 12):
         if board[row][j] == None:
             moves.append((row, j))
@@ -157,7 +159,7 @@ def find_rook_moves(board, row, col, color):
             break
         else:
             break
-    
+
     for j in range(col-1, -1, -1):
         if board[row][j] == None:
             moves.append((row, j))
@@ -167,7 +169,7 @@ def find_rook_moves(board, row, col, color):
             break
         else:
             break
-    
+
     return moves
 
 
