@@ -2,7 +2,7 @@ import requests
 
 def init():
     # Postavljanje URL-a za lokalni poslužitelj
-    url = 'http://localhost:8081/user/login'
+    url = 'http://localhost:8080/user/login'
 
     # Postavljanje podataka koje želite poslati na poslužitelj u obliku rječnika
     data = {'username': 'admin', 'password': 'admin'}
@@ -16,7 +16,7 @@ def init():
 
 
     # createGame
-    url = 'http://localhost:8081/game/createGame'
+    url = 'http://localhost:8080/game/createGame'
     data = {
             'gameId': 1,
             'playerUsernames': [
@@ -30,7 +30,7 @@ def init():
     print(response.text)
 
     # login player1
-    url = 'http://localhost:8081/user/login'
+    url = 'http://localhost:8080/user/login'
     data = {'username': 'player1', 'password': 'sifra1'}
     response = requests.post(url, json=data)
     token_player1 = response.json()["token"]
@@ -44,25 +44,35 @@ def init():
 
 
     # join player1
-    url = 'http://localhost:8081/game/joinGame'
+    url = 'http://localhost:8080/game/joinGame'
     headers = {"Authorization": f"Bearer {token_player1}"}
     response = requests.get(url, headers=headers)
     print("player1 join:" + response.text)
 
     # join player2
-    url = 'http://localhost:8081/game/joinGame'
+    url = 'http://localhost:8080/game/joinGame'
     headers = {"Authorization": f"Bearer {token_player2}"}
     response = requests.get(url, headers=headers)
     print("player2 join:" + response.text)
 
 
     # doAction
-    ##url = 'http://localhost:8081/game/doAction'
-    ##headers = {"Authorization": f"Bearer {token_player1}"}
-    ##data = {
-    ##            'action': 'P-K-0-0'
-    ##        }
-    ##requests.post(url, headers=headers, json = data)
+    url = 'http://localhost:8080/game/doAction'
+    headers = {"Authorization": f"Bearer {token_player1}"}
+    data = {
+                'action': 'P-K-1-0'
+            }
+    requests.post(url, headers=headers, json = data)
+
+    # doAction
+    url = 'http://localhost:8080/game/doAction'
+    headers = {"Authorization": f"Bearer {token_player1}"}
+    data = {
+                'action': 'P-K-1-1'
+            }
+    response = requests.post(url, headers=headers, json = data)
+    print(response.text)
+
 
     
 
