@@ -37,13 +37,17 @@ def find_DLG_bishop_moves(board, row, col):
                         if testlista[row + r][col - c]["black"] != testlista[row][col]["black"] and testlista[row + r][col - c]["type"] != "C":
                             moves.append([row+r,col+c])
 
-                    if board[row+r][col-c] is None:
+                    if testlista[row+r][col-c] is None:
                         moves.append([row+r,col-c])
                     else:
                         if testlista[row + r][col - c]["black"] != testlista[row][col]["black"] and testlista[row + r][col - c]["type"] != "C":
                             moves.append([row+r,col+c])
 
     return moves
+
+#=================================================================================================================
+def je_li_cigla(board, row, col):
+    return board[row][col]["type"] == "C"
 
 
 #==================================================================================================================
@@ -55,52 +59,42 @@ def find_pawn_moves(board, row, col):
     testlista = board.get_board1()
 
     if testlista[row][col]['black'] != True :
+
+        if testlista[row + 1][col] is not None and testlista[row + 1][col]["black"] != testlista[row][col]["black"] and not je_li_cigla(testlista, row+1, col):
+                moves.append((row + 1, col))
         if row == 2:
-            if testlista[row + 2][col + 2] == None:
+            if testlista[row + 2][col + 2] is None:
                 moves.append((row + 2, col + 2))
-            if testlista[row + 2][col - 2] == None:
+            if testlista[row + 2][col - 2] is None:
                 moves.append((row + 2, col - 2))
-            if testlista[row + 1][col + 1] == None:
+            if testlista[row + 1][col + 1] is None:
                 moves.append((row + 1, col + 1))
-            if testlista[row + 1][col - 1] == None:
+            if testlista[row + 1][col - 1] is None:
                 moves.append((row + 1, col - 1))
 
-            if testlista[row + 1][col + 1] is not None:
-                if testlista[row + 1][col + 1]['black']:
-                    moves.append((row + 1, col - 1))
-
-            if board[row + 1][col] is None:
-                moves.append((row + 1, col))
-
-            # todo provjeri je li cigla ispred
         else:
-            if board[row + 1][col + 1] == None:
+            if testlista[row + 1][col + 1] is None:
                 moves.append((row + 1, col + 1))
-            if board[row + 1][col - 1] == None:
+            if testlista[row + 1][col - 1] is None:
                 moves.append((row + 1, col - 1))
-            if board[row + 1][col] != None:
-                moves.append((row + 1, col))
-
 
     else:
+        if testlista[row - 1][col] is not None and testlista[row - 1][col]["black"] != testlista[row][col]["black"] and not je_li_cigla(testlista, row-1, col):
+                moves.append((row - 1, col))
         if row == 11:
-            if board[row - 2][col - 2] == None:
+            if testlista[row - 2][col - 2] is None:
                 moves.append((row - 2, col - 2))
-            if board[row - 2][col + 2] == None:
+            if testlista[row - 2][col + 2] is None:
                 moves.append((row - 2, col + 2))
-            if board[row - 1][col - 1] == None:
+            if testlista[row - 1][col - 1] is None:
                 moves.append((row - 1, col - 1))
-            if board[row - 1][col + 1] == None:
+            if testlista[row - 1][col + 1] is None:
                 moves.append((row - 1, col + 1))
-            if board[row - 1][col] != None:
-                moves.append((row - 1, col))
         else:
-            if board[row - 1][col - 1] == None:
+            if testlista[row - 1][col - 1] is None:
                 moves.append((row - 1, col - 1))
-            if board[row - 1][col + 1] == None:
+            if testlista[row - 1][col + 1] is None:
                 moves.append((row - 1, col + 1))
-            if board[row - 1][col] != None:
-                moves.append((row - 1, col))
 
     return moves
 
@@ -131,40 +125,36 @@ def find_rook_moves(board, row, col, color):
 
     # Check horizontal and vertical moves
     for i in range(row+1, 12):
-        if board[i][col] == None:
+        if testlista[i][col] is None:
             moves.append((i, col))
-        elif board[i][col].color != color:
-            #i nije cigla
+        elif testlista[i][col]["black"] != testlista[row][col]["black"] and testlista[i][col]["type"] != "C": 
             moves.append((i, col))
             break
         else:
             break
 
     for i in range(row-1, -1, -1):
-        if board[i][col] == None:
+        if testlista[i][col] is None:
             moves.append((i, col))
-        elif board[i][col].color != color:
-            #i nije cigla
+        elif testlista[i][col]["black"] != testlista[row][col]["black"] and testlista[i][col]["type"] != "C":
             moves.append((i, col))
             break
         else:
             break
 
     for j in range(col+1, 12):
-        if board[row][j] == None:
+        if testlista[row][j] is None:
             moves.append((row, j))
-        elif board[row][j].color != color:
-            #i nije cigla
+        elif testlista[row][j]["black"]!= testlista[row][col]["black"] and testlista[row][j]["type"] != "C": 
             moves.append((row, j))
             break
         else:
             break
 
     for j in range(col-1, -1, -1):
-        if board[row][j] == None:
+        if testlista[row][j] is None:
             moves.append((row, j))
-        elif board[row][j].color != color:
-            #i nije cigla
+        elif testlista[row][j]["black"]!= testlista[row][col]["black"] and testlista[row][j]["type"] != "C": 
             moves.append((row, j))
             break
         else:
@@ -185,9 +175,13 @@ def find_king_moves(board, row, col, color):
     for c in range(-1, 1):
         for r in range(-1, 1):
             if c != 0 and r != 0:
-                if board[row + r][col + c] == None or (board[row + r][col + c].color != color and  # nije cigla):
-                                                       moves.append((row + r, col + c))
-            return moves
+                if testlista[row + r][col + c] is None
+                    moves.append((row + r, col + c))
+                else:
+                    if testlista[row + r][col + c]["black"]!=testlista[row][col]["black"] and testlista[row+r][col+c]["type"] != "C":
+                        moves.append((row + r, col + c))
+
+    return moves
 
 
 # ==================================================================================================================
@@ -200,44 +194,44 @@ def find_queen_moves(board, row, col, color):
     # Check diagonal moves________________________________
     # gore desno
     i = 1
-    while i > 0 and i < 13 and board[row + i][col + i] == None:
+    while i > 0 and i < 13 and testlista[row + i][col + i] is None:
         i += 1
         if row + i >= 12 or col + i >= 12:
             break
-    if board[row + i][col + i].color() == color  # or is cigla
+    if testlista[row + i][col + i]["black"] == color  # or is cigla
         moves.append(row + i - 1, col + i - 1)
     else:
         moves.append(row + i, col + i)
 
     # dole livo
     i = 1
-    while i > 0 and i < 13 and board[row - i][col - i] == None:
+    while i > 0 and i < 13 and testlista[row - i][col - i] is None:
         i += 1
         if row - i <= 0 or col - i <= 0:
             break
-    if board[row - i][col - i].color() == color  # or is cigla
+    if testlista[row - i][col - i]["black"] == color  # or is cigla
         moves.append(row - i + 1, col - i + 1)
     else:
         moves.append(row - i, col - i)
 
     # dole desno
     i = 1
-    while i > 0 and i < 13 and board[row - i][col + i] == None:
+    while i > 0 and i < 13 and testlista[row - i][col + i] is None:
         i += 1
         if row - i <= 0 or col + i >= 12:
             break
-    if board[row - i][col + i].color() == color  # or is cigla
+    if testlista[row - i][col + i]["black"] == color  # or is cigla
         moves.append(row - i + 1, col + i + 1)
     else:
         moves.append(row - i, col + i)
 
     # gore livo
     i = 1
-    while i > 0 and i < 13 and board[row + i][col - i] == None:
+    while i > 0 and i < 13 and testlista[row + i][col - i] is None:
         i += 1
         if row + i >= 12 or col - i <= 0:
             break
-    if board[row + i][col - i].color() == color  # or is cigla
+    if testlista[row + i][col - i]["black"] == color  # or is cigla
         moves.append(row + i - 1, col - i - 1)
     else:
         moves.append(row + i, col - i)
@@ -245,35 +239,35 @@ def find_queen_moves(board, row, col, color):
     # Check horizontal and vertical moves_________________________________________
     # gore
     i = 1
-    while board[row + i][col] == None and row + i >= 12:
+    while testlista[row + i][col] is None and row + i >= 12:
         i += 1
-    if board[row + i][col].color() == color  # or is cigla
+    if testlista[row + i][col]["black"] == color  # or is cigla
         moves.append(row + i - 1, col - 1)
     else:
         moves.append(row + i, col)
     # dole
     i = 1
-    while board[row - i][col] == None and row - i <= 0:
+    while testlista[row - i][col] is None and row - i <= 0:
         i += 1
-    if board[row + i][col - i].color() == color  # or is cigla
+    if testlista[row + i][col - i]["black"] == color  # or is cigla
         moves.append(row + i - 1, col - i - 1)
     else:
         moves.append(row + i, col)
 
     # livo
     i = 1
-    while board[row][col - 1] == None and col - i <= 0:
+    while testlista[row][col - 1] is None and col - i <= 0:
         i += 1
-    if board[row][col - i].color() == color  # or is cigla
+    if testlista[row][col - i]["black"] == color  # or is cigla
         moves.append(row, col - i - 1)
     else:
         moves.append(row, col - i)
 
     # desno
     i = 1
-    while board[row][col + 1] == None and col + i <= 12:
+    while testlista[row][col + 1] is None and col + i <= 12:
         i += 1
-    if board[row][col + i].color() == color  # or is cigla
+    if testlista[row][col + i]["black"] == color  # or is cigla
         moves.append(row, col + i - 1)
     else:
         moves.append(row, col + i)
@@ -292,7 +286,7 @@ def find_sniper_moves(board, row, col, color):
     for c in range(-2, 2):
         for r in range(-2, 2):
             if c != 0 and r != 0:
-                if board[row + r][col + c] == None or (board[row + r][col + c].color != color): #todo and nije cigla
+                if testlista[row + r][col + c] is None or (testlista[row + r][col + c]["black"] testlista[row][col]["black"]): #todo and nije cigla
                        moves.append([row + r, col + c])
 
     return moves
@@ -312,7 +306,7 @@ def find_kamikaza_moves(board, row, col, color):
         new_row = row + move[0]
         new_col = col + move[1]
         if 1 <= new_row <= 12 and 1 <= new_col <= 12 and (
-                board[new_row][new_col] == None or board[new_row][new_col].color != color):  # i nije cigla
+                testlista[new_row][new_col] is None or testlista[new_row][new_col]["black"] testlista[row][col]["black"]):  # i nije cigla
             moves.append((new_row, new_col))
 
     return moves
